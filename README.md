@@ -133,13 +133,13 @@ Please cite the tools used within this pipeline:
 ---
 
 ## 🧑‍⚖️ License
-**MIT License** — open use and modification permitted with attribution.
+**NFSU License** — open use and modification permitted with attribution.
 
 ---
 
 ## ✉️ Contact / Issues
 For questions, feature requests, or collaboration inquiries, please open a GitHub Issue or contact:
 
-**[Your Name]** · [Your Institution] · [Your Email]
+**Vishal Mevada** · National Forensic Sciences Unviersity
 
 ---
