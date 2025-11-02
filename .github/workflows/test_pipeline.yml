@@ -1,0 +1,67 @@
+name: Test Forensic Microbiome Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:    # allows manual run from Actions tab
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Miniconda (install environment)
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          # If environment.yml is heavy, consider making a smaller test env file for CI
+          environment-file: environment.yml
+          activate-environment: forensic-microbiome
+          auto-activate-base: false
+          python-version: "3.10"
+          # cache packages to speed up runs:
+          cache-size: 1024
+
+      - name: Verify conda and snakemake
+        shell: bash -l {0}
+        run: |
+          echo "Conda info:"
+          conda info
+          echo
+          which snakemake || echo "snakemake not found"
+          snakemake --version || echo "snakemake failed to run"
+
+      - name: Snakemake dry-run (validate Snakefile)
+        shell: bash -l {0}
+        run: |
+          # run a dry-run (-n) to validate DAG and rule syntax (no heavy jobs executed)
+          snakemake -np --use-conda
+
+      - name: Create tiny test inputs for report rendering
+        run: |
+          mkdir -p results/bracken
+          cat > results/bracken/bracken_species_table.tsv <<'TSV'
+taxonomy	Sample1
+Bacteroides fragilis	100
+TSV
+          cat > samples.tsv <<'TSV'
+sample_id	group_smoking	group_diet	age	sex	batch	case_id	location	substrate
+Sample1	yes	veg	35	M	A1	C01	mouth	swab
+TSV
+
+      - name: Render RMarkdown test report (small test)
+        shell: bash -l {0}
+        run: |
+          # Render the RMarkdown report using Rscript
+          Rscript -e "rmarkdown::render('Microbiome_Group_Comparison_Report.Rmd', params=list(bracken_table='results/bracken/bracken_species_table.tsv', samples_tsv='samples.tsv'), output_file='results/report/test_report.html')"
+
+      - name: Upload test report as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: results/report/test_report.html
