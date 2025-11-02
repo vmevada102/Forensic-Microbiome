@@ -1,0 +1,23 @@
+# config.yaml - edit paths and parameters
+raw_dir: data/raw_fastq
+results_dir: results
+samples_tsv: config/samples.tsv
+threads: 16
+# Tools & DBs
+kraken_db: /path/to/kraken_db
+bracken_db: /path/to/bracken_db
+human_bowtie2_index: /path/to/human/bowtie2/index
+humann_db: /path/to/humann_db
+amr_db_dir: /path/to/abricate_databases  # for abricate or path to amrfinder DB
+# paths for binaries (optional override)
+fastp: fastp
+kneaddata: kneaddata
+kraken2: kraken2
+bracken: bracken
+metaphlan: metaphlan
+megahit: megahit
+abricate: abricate
+amrfinder: amrfinder
+Rscript: Rscript
+rmd_report: Microbiome_Group_Comparison_Report.Rmd
+classifier_target: group_smoking  # default target; change in config to any metadata column
