@@ -30,7 +30,7 @@ It automates all major stages — from raw FASTQ reads to taxonomic profiling, A
 
 ### 1️⃣ Clone this repository
 ```bash
-git clone https://github.com/<your-username>/forensic-microbiome-pipeline.git
+git clone https://github.com/vmevada102/Forensic-Microbiome/forensic-microbiome-pipeline.git
 cd forensic-microbiome-pipeline
 ```
 
